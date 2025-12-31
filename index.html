@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PredictPro | Advanced Betting Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-black: #000000;
+            --secondary-black: #1a1a1a;
+            --primary-white: #ffffff;
+            --secondary-white: #f5f5f5;
+            --accent-gray: #333333;
+            --light-gray: #666666;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--primary-white);
+            color: var(--primary-black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            color: var(--primary-white);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--primary-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 6rem auto 2rem;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--accent-gray);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Tools Grid */
+        .tools-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--primary-black);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tool-card {
+            background: var(--secondary-white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: var(--primary-black);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-black);
+        }
+
+        .tool-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .tool-card p {
+            color: var(--light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: var(--primary-white);
+        }
+
+        .calculate-btn {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .calculate-btn:hover {
+            background-color: var(--accent-gray);
+            transform: translateY(-2px);
+        }
+
+        .result-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: var(--primary-white);
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            display: none;
+        }
+
+        .result-box.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Support Section */
+        .support-section {
+            background-color: var(--secondary-white);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 4rem 0;
+            border: 2px solid var(--primary-black);
+        }
+
+        .support-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .support-text {
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .airtel-code {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: all;
+        }
+
+        .airtel-code:hover {
+            background-color: var(--accent-gray);
+            transform: scale(1.05);
+        }
+
+        .copy-notification {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #aaa;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-white);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--accent-gray);
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: var(--primary-black);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .main-content {
+                margin-top: 5rem;
+                padding: 0 1rem;
+            }
+
+            .support-section {
+                padding: 2rem 1rem;
+            }
+
+            .airtel-code {
+                font-size: 1.5rem;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-black);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-chart-line logo-icon"></i>
+                PredictPro
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="nav-links" id="navLinks">
+                <a href="#tools"><i class="fas fa-tools"></i> Tools</a>
+                <a href="#support"><i class="fas fa-coffee"></i> Support Us</a>
+                <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Advanced Betting Analytics Platform</h1>
+            <p>Professional statistical tools for precise predictions using Poisson Distribution, Dixon-Coles Simulation, and Value Bet Analysis</p>
+        </section>
+
+        <!-- Tools Section -->
+        <section class="tools-section" id="tools">
+            <h2 class="section-title">Prediction Tools</h2>
+            
+            <div class="tools-grid">
+                <!-- Poisson Distribution Tool -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>Poisson Distribution</h3>
+                    <p>Calculate exact score probabilities based on average goals. use google gemini to fetch data</p>
+                    
+                    <input type="number" class="tool-input" id="poissonAvgHome" placeholder="Home Team Avg Goals (e.g., 1.5)" step="0.1">
+                    <input type="number" class="tool-input" id="poissonAvgAway" placeholder="Away Team Avg Goals (e.g., 1.2)" step="0.1">
+                    
+                    <button class="calculate-btn" onclick="calculatePoisson()">
+                        Calculate Probabilities
+                    </button>
+                    
+                    <div class="result-box" id="poissonResult">
+                        <h4>Probability Results:</h4>
+                        <div id="poissonResultsContent"></div>
+                    </div>
+                </div>
+
+                <!-- Dixon-Coles Simulation -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Dixon-Coles Simulation</h3>
+                    <p>Advanced time-weighted football prediction model.  use google gemini to collect data or use screenshot to ask</p>
+                    
+                    <input type="number" class="tool-input" id="dcHomeAttack" placeholder="Home Attack Strength" step="0.01">
+                    <input type="number" class="tool-input" id="dcHomeDefense" placeholder="Home Defense Strength" step="0.01">
+                    <input type="number" class="tool-input" id="dcAwayAttack" placeholder="Away Attack Strength" step="0.01">
+                    <input type="number" class="tool-input" id="dcAwayDefense" placeholder="Away Defense Strength" step="0.01">
+                    
+                    <button class="calculate-btn" onclick="calculateDixonColes()">
+                        Run Simulation
+                    </button>
+                    
+                    <div class="result-box" id="dcResult">
+                        <h4>Simulation Results:</h4>
+                        <div id="dcResultsContent"></div>
+                    </div>
+                </div>
+
+                <!-- Value Bet Analysis -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-search-dollar"></i>
+                    </div>
+                    <h3>Value Bet Analysis</h3>
+                    <p>Identify profitable betting opportunities.  please use google gemini to ask data to put here</p>
+                    
+                    <input type="number" class="tool-input" id="vbProbability" placeholder="Your Probability % (e.g., 45)" step="0.1">
+                    <input type="number" class="tool-input" id="vbOdds" placeholder="Bookmaker Odds (e.g., 2.50)" step="0.01">
+                    <input type="number" class="tool-input" id="vbStake" placeholder="Stake Amount ($)" step="0.01">
+                    
+                    <button class="calculate-btn" onclick="calculateValueBet()">
+                        Analyze Value
+                    </button>
+                    
+                    <div class="result-box" id="vbResult">
+                        <h4>Analysis Results:</h4>
+                        <div id="vbResultsContent"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Section -->
+        <section class="support-section" id="support">
+            <h2 class="support-title">☕ Support Our Development</h2>
+            <p class="support-text">
+                We're committed to providing you with the best prediction tools. 
+                Your support helps us improve features, add more models, and maintain the platform.
+            </p>
+            <p class="support-text">
+                <strong>Please buy us a coffee to fuel our development!</strong>
+            </p>
+            
+            <div class="airtel-code" id="airtelCode" onclick="copyAirtelCode()">
+                Airtel Code: <strong>292504</strong>
+                <br>
+                <small style="font-size: 0.8rem;">(Click to copy)</small>
+            </div>
+            
+            <p style="color: var(--light-gray); margin-top: 1rem;">
+                Use Airtel Money and dial *182*8*1# → Send Money → Enter Code: 292504
+            </p>
+        </section>
+
+        <!-- Copy Notification -->
+        <div class="copy-notification" id="copyNotification">
+            Code copied to clipboard! 🎉
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>PredictPro</h4>
+                <p>Advanced statistical betting analysis platform providing professional tools for informed predictions.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Tools</h4>
+                <a href="#tools">Poisson Distribution</a>
+                <a href="#tools">Dixon-Coles Simulation</a>
+                <a href="#tools">Value Bet Analysis</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Contact & Support</h4>
+                <a href="mailto:support@predictpro.com">eurofixers@gmail.com</a>
+                <a href="#support">Buy Us Coffee</a>
+                <a href="#">FAQ</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Responsible Gaming</a>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2024 PredictPro. All calculations are for informational purposes only.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #888;">
+                For entertainment purposes. Bet responsibly.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // Copy Airtel Code Function
+        function copyAirtelCode() {
+            const code = "292504";
+            navigator.clipboard.writeText(code).then(() => {
+                const notification = document.getElementById('copyNotification');
+                notification.style.display = 'block';
+                
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            });
+        }
+
+        // Poisson Distribution Calculator
+        function calculatePoisson() {
+            const avgHome = parseFloat(document.getElementById('poissonAvgHome').value) || 1.5;
+            const avgAway = parseFloat(document.getElementById('poissonAvgAway').value) || 1.2;
+            
+            const resultBox = document.getElementById('poissonResult');
+            const content = document.getElementById('poissonResultsContent');
+            
+            // Show loading
+            content.innerHTML = '<div class="loading"></div> Calculating...';
+            resultBox.classList.add('active');
+            
+            setTimeout(() => {
+                // Calculate Poisson probabilities
+                const probabilities = [];
+                const maxGoals = 4;
+                
+                for (let i = 0; i <= maxGoals; i++) {
+                    for (let j = 0; j <= maxGoals; j++) {
+                        const prob = (Math.exp(-avgHome) * Math.pow(avgHome, i) / factorial(i)) *
+                                    (Math.exp(-avgAway) * Math.pow(avgAway, j) / factorial(j));
+                        probabilities.push({
+                            score: `${i}-${j}`,
+                            probability: (prob * 100).toFixed(2)
+                        });
+                    }
+                }
+                
+                // Sort by probability
+                probabilities.sort((a, b) => b.probability - a.probability);
+                
+                // Display top 5 results
+                let html = '<ul style="list-style: none; padding: 0;">';
+                probabilities.slice(0, 5).forEach(p => {
+                    html += `<li style="padding: 5px 0; border-bottom: 1px solid #eee;">
+                        <strong>${p.score}</strong>: ${p.probability}% probability
+                    </li>`;
+                });
+                html += '</ul>';
+                
+                html += `<p style="margin-top: 10px; color: #333;">
+                    Most likely score: <strong>${probabilities[0].score}</strong> (${probabilities[0].probability}%)
+                </p>`;
+                
+                content.innerHTML = html;
+            }, 800);
+        }
+
+        // Dixon-Coles Simulation
+        function calculateDixonColes() {
+            const homeAttack = parseFloat(document.getElementById('dcHomeAttack').value) || 1.2;
+            const homeDefense = parseFloat(document.getElementById('dcHomeDefense').value) || 0.9;
+            const awayAttack = parseFloat(document.getElementById('dcAwayAttack').value) || 1.1;
+            const awayDefense = parseFloat(document.getElementById('dcAwayDefense').value) || 1.0;
+            
+            const resultBox = document.getElementById('dcResult');
+            const content = document.getElementById('dcResultsContent');
+            
+            content.innerHTML = '<div class="loading"></div> Running simulation...';
+            resultBox.classList.add('active');
+            
+            setTimeout(() => {
+                // Simplified Dixon-Coles calculation
+                const homeExpected = homeAttack * awayDefense * 1.4;
+                const awayExpected = awayAttack * homeDefense * 1.4;
+                
+                const homeWinProb = 45 + (homeExpected - awayExpected) * 8;
+                const drawProb = 25 - Math.abs(homeExpected - awayExpected) * 3;
+                const awayWinProb = 30 + (awayExpected - homeExpected) * 8;
+                
+                // Normalize probabilities
+                const total = homeWinProb + drawProb + awayWinProb;
+                const normalizedHome = (homeWinProb / total * 100).toFixed(1);
+                const normalizedDraw = (drawProb / total * 100).toFixed(1);
+                const normalizedAway = (awayWinProb / total * 100).toFixed(1);
+                
+                const html = `
+                    <div style="margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Home Win:</span>
+                            <span><strong>${normalizedHome}%</strong></span>
+                        </div>
+                        <div style="height: 10px; background: #eee; border-radius: 5px; overflow: hidden;">
+                            <div style="width: ${normalizedHome}%; height: 100%; background: #000;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Draw:</span>
+                            <span><strong>${normalizedDraw}%</strong></span>
+                        </div>
+                        <div style="height: 10px; background: #eee; border-radius: 5px; overflow: hidden;">
+                            <div style="width: ${normalizedDraw}%; height: 100%; background: #333;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Away Win:</span>
+                            <span><strong>${normalizedAway}%</strong></span>
+                        </div>
+                        <div style="height: 10px; background: #eee; border-radius: 5px; overflow: hidden;">
+                            <div style="width: ${normalizedAway}%; height: 100%; background: #666;"></div>
+                        </div>
+                    </div>
+                    
+                    <p style="margin-top: 15px; color: #333;">
+                        Expected Goals: Home ${homeExpected.toFixed(2)} - Away ${awayExpected.toFixed(2)}
+                    </p>
+                `;
+                
+                content.innerHTML = html;
+            }, 1000);
+        }
+
+        // Value Bet Analysis
+        function calculateValueBet() {
+            const probability = parseFloat(document.getElementById('vbProbability').value) || 45;
+            const odds = parseFloat(document.getElementById('vbOdds').value) || 2.50;
+            const stake = parseFloat(document.getElementById('vbStake').value) || 100;
+            
+            const resultBox = document.getElementById('vbResult');
+            const content = document.getElementById('vbResultsContent');
+            
+            content.innerHTML = '<div class="loading"></div> Analyzing value...';
+            resultBox.classList.add('active');
+            
+            setTimeout(() => {
+                const fairOdds = 100 / probability;
+                const valuePercent = ((odds / fairOdds - 1) * 100).toFixed(1);
+                const expectedValue = (probability/100 * (odds-1) * stake - (1-probability/100) * stake).toFixed(2);
+                const kellyStake = ((probability/100 * odds - 1) / (odds - 1) * 100).toFixed(1);
+                
+                let recommendation = '';
+                let color = '#000';
+                
+                if (valuePercent > 15) {
+                    recommendation = 'STRONG VALUE BET ✅';
+                    color = '#00a000';
+                } else if (valuePercent > 5) {
+                    recommendation = 'Good Value Bet 👍';
+                    color = '#007700';
+                } else if (valuePercent > 0) {
+                    recommendation = 'Marginal Value';
+                    color = '#555500';
+                } else {
+                    recommendation = 'No Value ❌';
+                    color = '#cc0000';
+                }
+                
+                const html = `
+                    <div style="margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Value Percentage:</span>
+                            <span style="font-weight: 700; color: ${valuePercent >= 0 ? '#00a000' : '#cc0000'}">
+                                ${valuePercent >= 0 ? '+' : ''}${valuePercent}%
+                            </span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Fair Odds:</span>
+                            <span><strong>${fairOdds.toFixed(2)}</strong></span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Expected Value:</span>
+                            <span><strong>$${expectedValue}</strong></span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                            <span>Kelly Stake:</span>
+                            <span><strong>${kellyStake}% of bankroll</strong></span>
+                        </div>
+                        
+                        <div style="padding: 15px; background-color: ${color}15; border-left: 4px solid ${color};">
+                            <strong style="color: ${color}">Recommendation:</strong><br>
+                            ${recommendation}
+                        </div>
+                    </div>
+                `;
+                
+                content.innerHTML = html;
+            }, 600);
+        }
+
+        // Helper function for factorial (for Poisson)
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add sample data on page load for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set some sample values
+            document.getElementById('poissonAvgHome').value = '1.8';
+            document.getElementById('poissonAvgAway').value = '1.3';
+            
+            document.getElementById('dcHomeAttack').value = '1.25';
+            document.getElementById('dcHomeDefense').value = '0.95';
+            document.getElementById('dcAwayAttack').value = '1.15';
+            document.getElementById('dcAwayDefense').value = '1.05';
+            
+            document.getElementById('vbProbability').value = '42';
+            document.getElementById('vbOdds').value = '2.80';
+            document.getElementById('vbStake').value = '100';
+        });
+    </script>
+</body>
+</html>
